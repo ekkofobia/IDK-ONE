@@ -15,7 +15,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #7c3aed; /* Roxo do fundo */
+            background-color: #1a1a1a;
             font-family: 'Inter', sans-serif;
         }
 
@@ -30,10 +30,11 @@
 
         .header-image {
             height: 160px;
-            background-color: #12121c;
             position: relative;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 80%);
+            background-image: url('https://res.cloudinary.com/dwrq06fta/image/upload/v1777820331/Amplie_pra_16x9_2K_202604302332.jpeg_djc2th.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         /* Padrão de conexões no topo */
@@ -101,15 +102,18 @@
         }
 
         .follow-btn {
-            background-color: #fff;
-            color: #000;
+            background-color: #1DB954;
+            color: #fff;
             border: none;
-            padding: 7px 16px;
+            padding: 7px 10px;
             border-radius: 20px;
             font-weight: 600;
             font-size: 12px;
             cursor: pointer;
-            margin-left: 5px;
+            margin-left: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .info h1 {
@@ -273,7 +277,7 @@
                 <a href="https://youtube.com/@idkone.mp3?si=SQ5pnd0bnp6kJ3YQ" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
                 <a href="#" class="social-icon" onclick="alert('Em breve');return false;"><i class="fab fa-tiktok"></i></a>
                 <a href="#" class="social-icon" onclick="alert('Em breve');return false;"><i class="fab fa-x-twitter"></i></a>
-                <button class="follow-btn" id="followBtn">Seguir</button>
+                <button class="follow-btn" id="followBtn" onclick="alert('Em breve')"><i class="fab fa-spotify"></i> Spotify</button>
             </div>
 
             <div class="info">
@@ -312,15 +316,6 @@
     <audio id="audio-player" src="https://res.cloudinary.com/dwrq06fta/video/upload/v1777818962/idkone_m%C3%BAsica_wmukiq.aac" preload="auto"></audio>
 
     <script>
-        // Follow button
-        const btn = document.getElementById('followBtn');
-        btn.addEventListener('click', () => {
-            const isFollowing = btn.innerText === 'Seguindo';
-            btn.innerText = isFollowing ? 'Seguir' : 'Seguindo';
-            btn.style.backgroundColor = isFollowing ? '#fff' : '#27272a';
-            btn.style.color = isFollowing ? '#000' : '#fff';
-        });
-
         // Player
         let playing = false;
         let liked = false;
