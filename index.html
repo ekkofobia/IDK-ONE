@@ -220,7 +220,7 @@
 
         .player-time { font-size: 10px; color: #71717a; white-space: nowrap; }
 
-        .player-controls { display: flex; align-items: center; gap: 14px; }
+        .player-controls { display: flex; align-items: center; justify-content: space-between; gap: 0; }
 
         .ctrl-btn {
             background: none;
@@ -230,11 +230,14 @@
             cursor: pointer;
             padding: 0;
             transition: color 0.2s;
+            flex: 1;
+            display: flex;
+            justify-content: center;
         }
 
         .ctrl-btn:hover { color: #fff; }
         .ctrl-btn.play-pause { color: #fff; font-size: 16px; }
-        .ctrl-btn.like { margin-left: auto; }
+        .ctrl-btn.like { margin-left: 0; }
         .ctrl-btn.like.liked { color: #7c3aed; }
     </style>
 </head>
@@ -266,10 +269,10 @@
             </div>
 
             <div class="action-bar">
-                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://www.instagram.com/idkone.wav?igsh=bnR5MTR1emY2aTE2" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://youtube.com/@idkone.mp3?si=SQ5pnd0bnp6kJ3YQ" target="_blank" class="social-icon"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" onclick="alert('Em breve');return false;"><i class="fab fa-tiktok"></i></a>
+                <a href="#" class="social-icon" onclick="alert('Em breve');return false;"><i class="fab fa-x-twitter"></i></a>
                 <button class="follow-btn" id="followBtn">Seguir</button>
             </div>
 
