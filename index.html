@@ -305,12 +305,9 @@
         </div>
     </div>
 
-    <!-- YouTube iframe escondido -->
-    <div style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;">
-        <div id="yt-player"></div>
-    </div>
+    <!-- Áudio direto Cloudinary -->
+    <audio id="audio-player" src="https://res.cloudinary.com/dwrq06fta/video/upload/v1777818962/idkone_m%C3%BAsica_wmukiq.aac" preload="auto"></audio>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         // Follow button
         const btn = document.getElementById('followBtn');
@@ -321,47 +318,17 @@
             btn.style.color = isFollowing ? '#000' : '#fff';
         });
 
-        // YouTube IFrame API
-        let ytPlayer = null;
+        // Player
         let playing = false;
         let liked = false;
         let interval = null;
 
+        const audio = document.getElementById('audio-player');
         const playBtn = document.getElementById('playBtn');
         const vinyl = document.getElementById('vinyl');
         const progressFill = document.getElementById('progressFill');
         const timeDisplay = document.getElementById('timeDisplay');
         const likeBtn = document.getElementById('likeBtn');
-
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player', {
-                videoId: 'uHYpmhPbyww',
-                playerVars: { autoplay: 0, controls: 0, mute: 1 },
-                events: {
-                    onReady: function(e) {
-                        // Pré-carrega: toca mudo por 1 segundo e pausa, assim o buffer já começa
-                        e.target.playVideo();
-                        setTimeout(() => {
-                            e.target.pauseVideo();
-                            e.target.seekTo(0);
-                            e.target.unMute();
-                        }, 1000);
-                    },
-                    onStateChange: function(e) {
-                        if (e.data === YT.PlayerState.PLAYING && playing) {
-                            startProgress();
-                            vinyl.classList.add('playing');
-                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-                            clearInterval(interval);
-                            vinyl.classList.remove('playing');
-                            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                            playing = false;
-                        }
-                    }
-                }
-            });
-        }
 
         function formatTime(s) {
             s = Math.floor(s);
@@ -373,25 +340,35 @@
         function startProgress() {
             clearInterval(interval);
             interval = setInterval(() => {
-                if (!ytPlayer) return;
-                const cur = ytPlayer.getCurrentTime();
-                const dur = ytPlayer.getDuration();
-                if (dur > 0) {
-                    progressFill.style.width = (cur / dur * 100) + '%';
-                    timeDisplay.textContent = formatTime(cur);
+                if (audio.duration > 0) {
+                    progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+                    timeDisplay.textContent = formatTime(audio.currentTime);
                 }
             }, 500);
         }
 
+        audio.addEventListener('ended', () => {
+            clearInterval(interval);
+            playing = false;
+            vinyl.classList.remove('playing');
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            progressFill.style.width = '0%';
+            timeDisplay.textContent = '0:00';
+        });
+
         playBtn.addEventListener('click', () => {
-            if (!ytPlayer) return;
             if (playing) {
+                audio.pause();
+                clearInterval(interval);
+                vinyl.classList.remove('playing');
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
                 playing = false;
-                ytPlayer.pauseVideo();
             } else {
+                audio.play();
+                startProgress();
+                vinyl.classList.add('playing');
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 playing = true;
-                ytPlayer.unMute();
-                ytPlayer.playVideo();
             }
         });
 
@@ -402,11 +379,11 @@
         });
 
         document.getElementById('progressBar').addEventListener('click', (e) => {
-            if (!ytPlayer) return;
             const rect = e.currentTarget.getBoundingClientRect();
             const pct = (e.clientX - rect.left) / rect.width;
-            const dur = ytPlayer.getDuration();
-            ytPlayer.seekTo(pct * dur, true);
+            audio.currentTime = pct * audio.duration;
+            progressFill.style.width = (pct * 100) + '%';
+            timeDisplay.textContent = formatTime(audio.currentTime);
         });
     </script>
 </body>
