@@ -262,7 +262,7 @@
 
         <div class="profile-area">
             <div class="avatar-box">
-                <div class="avatar-text">IK<span>ONE</span></div>
+                <img src="https://res.cloudinary.com/dwrq06fta/image/upload/v1777818332/DEixe_os_nomes_da_sugunda_202605021628.jpeg_k74mhx.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
             </div>
 
             <div class="action-bar">
@@ -336,14 +336,22 @@
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 videoId: 'uHYpmhPbyww',
-                playerVars: { autoplay: 0, controls: 0 },
+                playerVars: { autoplay: 0, controls: 0, mute: 1 },
                 events: {
+                    onReady: function(e) {
+                        // Pré-carrega: toca mudo por 1 segundo e pausa, assim o buffer já começa
+                        e.target.playVideo();
+                        setTimeout(() => {
+                            e.target.pauseVideo();
+                            e.target.seekTo(0);
+                            e.target.unMute();
+                        }, 1000);
+                    },
                     onStateChange: function(e) {
-                        if (e.data === YT.PlayerState.PLAYING) {
+                        if (e.data === YT.PlayerState.PLAYING && playing) {
                             startProgress();
                             vinyl.classList.add('playing');
                             playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                            playing = true;
                         } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
                             clearInterval(interval);
                             vinyl.classList.remove('playing');
@@ -378,8 +386,11 @@
         playBtn.addEventListener('click', () => {
             if (!ytPlayer) return;
             if (playing) {
+                playing = false;
                 ytPlayer.pauseVideo();
             } else {
+                playing = true;
+                ytPlayer.unMute();
                 ytPlayer.playVideo();
             }
         });
